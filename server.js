@@ -1,3 +1,6 @@
+global.rootRequire = function(name) {
+    return require(__dirname + '/' + name);
+}
 /**
 * Dependencies.
 */
@@ -54,6 +57,9 @@ server.register([
     },
     {
       register: require('./server/base/index.js')
+    },
+    {
+      register: require('./server/base/messages/index.js')
     }
 ], function () {
     //Start the server
