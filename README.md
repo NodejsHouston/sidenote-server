@@ -31,10 +31,3 @@ $ supervisor -e js  server
 ```
 
 Now all of your server js files are being watched and on change the node server gets restarted automatically.
-
-## Plugins
-The Hapi plugins that are being used.
-
-#### Hapi-Named-Routes
-Added names to the routes. This allows you to have access to the path in the templates just by using the `path.nameofroute` variable. [https://github.com/poeticninja/hapi-named-routes](https://github.com/poeticninja/hapi-named-routes)
-
