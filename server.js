@@ -36,9 +36,6 @@ server.register([
         }
     },
     {
-        register: require("hapi-named-routes")
-    },
-    {
       register: require('./server/base/index.js')
     },
     {
