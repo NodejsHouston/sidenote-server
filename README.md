@@ -2,7 +2,7 @@ sidenote-server
 ==========
 
 ## The Stack:
-**Node.js** - Because it's fast, easy to get started, and Javascript is awesome.
+**Node.js** - Because it's fast, easy to get started, and JavaScript is awesome.
 [http://nodejs.org/](http://nodejs.org/)
 
 **Hapi** - A very well designed server framework that is easy to understand, easy to create your own plugins, scales very well, cache options built in, and more.
@@ -18,7 +18,12 @@ Start the server by running the command:
 $ node server
 ```
 
-To see any changes you can manually just shutdown and restart the node server. This can be a pain so I use Supervisor to watch for file changes and restart the server [https://github.com/isaacs/node-supervisor](https://github.com/isaacs/node-supervisor).
+### Development:
+
+To see any changes you can manually just shutdown and restart the node
+server. This can be a pain so I use Supervisor to watch for file changes and
+restart the server
+[https://github.com/isaacs/node-supervisor](https://github.com/isaacs/node-supervisor).
 
 To install run:
 ```
@@ -31,3 +36,10 @@ $ supervisor -e js  server
 ```
 
 Now all of your server js files are being watched and on change the node server gets restarted automatically.
+
+#### Linting
+
+You can run the linter with the project's
+[shared configuration](https://github.com/google/eslint-config-google) by
+running `gulp lint`. The goal of linting the project is to keep a standard
+coding style, please be sure to run it on all PRs!
