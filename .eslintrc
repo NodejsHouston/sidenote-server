@@ -1,0 +1,6 @@
+{ 
+  "extends": "google",
+  "rules": {
+           "no-console": 0
+  }
+}
