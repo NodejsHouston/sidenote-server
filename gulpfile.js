@@ -2,6 +2,7 @@
 * Dependencies.
 */
 var gulp = require('gulp'),
+    eslint = require('gulp-eslint'),
     util = require('gulp-util'),
     concat = require('gulp-concat'),
     cleanCSS = require('gulp-clean-css'),
@@ -42,4 +43,12 @@ gulp.task('default', function(){
         .pipe(imagemin())
         .pipe(gulp.dest('./images/'));
 
+});
+
+
+gulp.task('lint', function() {
+  return gulp.src(['**/*.js', '!node_modules/**'])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });

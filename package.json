@@ -1,27 +1,26 @@
 {
-  "name": "hapi-ninja",
+  "name": "sidenote-server",
   "description": "Boilerplate Hapi server example. Node.js, Hapi, and Swig.",
-  "version": "0.4.1",
-  "author": "Saul Maddox",
+  "version": "0.0.0",
+  "author": "",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/poeticninja/hapi-ninja.git"
+    "url": "https://github.com/NodejsHouston/sidenote-server.git"
   },
   "main": "server.js",
   "engines": {
     "node": "4.4.x"
   },
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "bower install"
+    "start": "node server.js"
   },
   "dependencies": {
     "bower": "~1.3.9",
     "good": "^6.6.0",
     "good-console": "^5.3.1",
     "handlebars": "^4.0.5",
-    "hapi": "^11.1.4",
+    "hapi": "^13.2.1",
     "hapi-assets": "~0.3.0",
     "hapi-cache-buster": "~0.4.0",
     "hapi-named-routes": "~0.3.0",
@@ -31,7 +30,10 @@
     "vision": "^4.0.1"
   },
   "devDependencies": {
+    "eslint-config-google": "^0.4.0",
     "gulp": "~3.9.1",
+    "gulp-eslint": "^2.0.0",
+    "eslint": "^2.0.0",
     "gulp-clean-css": "^2.0.3",
     "gulp-concat": "~2.6.0",
     "gulp-imagemin": "~2.4.0",
