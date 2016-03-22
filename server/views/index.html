@@ -5,9 +5,146 @@
 {% block content %}
     <ul class="menu">
         <li><a href="{{path.index}}">Home</a></li>
-        <li><a href="{{path.about}}">About</a></li>
     </ul>
 
     <h1>{{title}}</h1>
-    <p>This is the homepage. AKA Index.</p>
+   <p><strong>USERS</strong></p>
+<p><span style="font-weight: 400;">// probably some out of the box RethinkDB UAC system would be best here...</span></p>
+<p><span style="font-weight: 400;">users</span></p>
+<p style="padding-left: 30px;"><span style="font-weight: 400;">post </span> <span style="font-weight: 400;">/users</span></p>
+<p style="padding-left: 30px;"><span style="font-weight: 400;">get</span> <span style="font-weight: 400;">/users/{uId}</span></p>
+<p style="padding-left: 30px;"><span style="font-weight: 400;">put &nbsp;</span> <span style="font-weight: 400;">/users/{uId}</span></p>
+<p style="padding-left: 30px;"><span style="font-weight: 400;">delete</span> <span style="font-weight: 400;">/users/{uId}</span></p>
+<p><strong><strong>&nbsp;</strong></strong></p>
+<p><strong>CHAT</strong></p>
+<p><strong><em>// chat can be channel based</em></strong></p>
+<p><strong><em>// channel id can be a hash of some analysis of the URL</em></strong></p>
+<p><strong><em>// within a channel we can have a message system</em></strong></p>
+<p><span style="font-weight: 400;">channels</span></p>
+<p><span style="font-weight: 400;">post</span> <span style="font-weight: 400;">/channels</span></p>
+<p style="padding-left: 30px;"><strong><em>// adds new channel to data store</em></strong></p>
+<p style="padding-left: 30px;"><strong><em>// emits channel obj to {channelList} event</em></strong></p>
+<p style="padding-left: 30px;"><strong>params {</strong></p>
+<p style="padding-left: 30px;"><strong>url : string</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>returns {</strong></p>
+<p style="padding-left: 30px;"><strong>success : boolean &nbsp;,</strong></p>
+<p style="padding-left: 30px;"><strong>cId </strong> <strong>: ObjectId</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p><strong><strong>&nbsp;</strong></strong></p>
+<p><span style="font-weight: 400;">get</span> <span style="font-weight: 400;">/channels</span></p>
+<p style="padding-left: 30px;"><strong><em>// get channels listing</em></strong></p>
+<p style="padding-left: 30px;"><strong>params { // for matching?</strong></p>
+<p style="padding-left: 30px;"><strong>tags &nbsp;&nbsp;: array , </strong> <strong>// matching a list of tags</strong></p>
+<p style="padding-left: 30px;"><strong>active : boolean , &nbsp;// match only if users are present</strong></p>
+<p style="padding-left: 30px;"><strong>limit &nbsp;: number , &nbsp;&nbsp;// for pagination</strong></p>
+<p style="padding-left: 30px;"><strong>skip &nbsp;&nbsp;: number &nbsp;&nbsp;&nbsp;&nbsp;// for pagination</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>returns {</strong></p>
+<p style="padding-left: 30px;"><strong>results : [</strong></p>
+<p style="padding-left: 30px;"><strong>{</strong></p>
+<p style="padding-left: 30px;"><strong>activeUsers &nbsp;&nbsp;: number ,</strong></p>
+<p style="padding-left: 30px;"><strong>tags</strong> <strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: array ,</strong></p>
+<p style="padding-left: 30px;"><strong>notifications : number</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>] ,</strong></p>
+<p style="padding-left: 30px;"><strong>count : number // easy to do, adds complexity to the db model</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p><strong><strong>&nbsp;</strong></strong></p>
+<p><span style="font-weight: 400;">get</span> <span style="font-weight: 400;">/channels/{cId}</span></p>
+<p style="padding-left: 30px;"><strong><em>// get channel info</em></strong></p>
+<p style="padding-left: 30px;"><strong>returns {</strong></p>
+<p style="padding-left: 30px;"><strong>activeUsers &nbsp;&nbsp;: number ,</strong></p>
+<p style="padding-left: 30px;"><strong>tags</strong> <strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: array ,</strong></p>
+<p style="padding-left: 30px;"><strong>notifications : array</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p><strong><strong><br /><br /></strong></strong></p>
+<p><span style="font-weight: 400;">channels/{cId}/join/</span></p>
+<p><span style="font-weight: 400;">post</span> <span style="font-weight: 400;">/channels/{cId}/join</span></p>
+<p style="padding-left: 30px;"><strong><em>// adds user to channel</em></strong></p>
+<p style="padding-left: 30px;"><strong><em>// emits subset of user obj to {addUser} event in a "room" identified </em></strong></p>
+<p style="padding-left: 30px;"><strong><em>// by cId</em></strong></p>
+<p style="padding-left: 30px;"><strong>params {</strong></p>
+<p style="padding-left: 30px;"><strong>user : { // or probably session data?</strong></p>
+<p style="padding-left: 30px;"><strong>id &nbsp;&nbsp;&nbsp;</strong> <strong> &nbsp;: ObjectId ,</strong></p>
+<p style="padding-left: 30px;"><strong>fName </strong> <strong> &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>lName </strong> <strong> &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>username &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>avatarURL : string</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>returns {</strong></p>
+<p style="padding-left: 30px;"><strong>username : string ,</strong></p>
+<p style="padding-left: 30px;"><strong>id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ObjectId ,</strong></p>
+<p style="padding-left: 30px;"><strong>channel &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>active &nbsp;&nbsp;: boolean</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong><strong>&nbsp;</strong></strong></p>
+<p><span style="font-weight: 400;">channels/{cId}/leave</span></p>
+<p style="padding-left: 30px;"><span style="font-weight: 400;">post</span> <span style="font-weight: 400;">/channels/{cId}/leave</span></p>
+<p style="padding-left: 30px;"><strong><em>// removes user from channel</em></strong></p>
+<p style="padding-left: 30px;"><strong><em>// emits subset of user obj to {removeUser} event in a "room" </em></strong></p>
+<p style="padding-left: 30px;"><strong><em>// identified by cId</em></strong></p>
+<p style="padding-left: 30px;"><strong>params {</strong></p>
+<p style="padding-left: 30px;"><strong>user : { // or probably session data?</strong></p>
+<p style="padding-left: 30px;"><strong>id &nbsp;&nbsp;&nbsp;</strong> <strong> &nbsp;: ObjectId ,</strong></p>
+<p style="padding-left: 30px;"><strong>fName </strong> <strong> &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>lName </strong> <strong> &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>username &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>avatarURL : string</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>returns {</strong></p>
+<p style="padding-left: 30px;"><strong>username : string ,</strong></p>
+<p style="padding-left: 30px;"><strong>id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ObjectId ,</strong></p>
+<p style="padding-left: 30px;"><strong>channel &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>active &nbsp;&nbsp;: boolean</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p><strong><strong>&nbsp;</strong></strong></p>
+<p><span style="font-weight: 400;">channels/{cId}/message/</span></p>
+<p><span style="font-weight: 400;">post</span> <span style="font-weight: 400;">/channels/{cId}/message</span></p>
+<p style="padding-left: 30px;"><strong><em>// add message obj to data store</em></strong></p>
+<p style="padding-left: 30px;"><strong><em>// emits message obj to {newMessage} event in a "room" identified </em></strong></p>
+<p style="padding-left: 30px;"><strong><em>// by cId</em></strong></p>
+<p style="padding-left: 30px;"><strong>params {</strong></p>
+<p style="padding-left: 30px;"><strong>markDown : string ,</strong></p>
+<p style="padding-left: 30px;"><strong>uId &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ObjectId</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>returns {</strong></p>
+<p style="padding-left: 30px;"><strong>mId &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ObjectId ,</strong></p>
+<p style="padding-left: 30px;"><strong>success &nbsp;&nbsp;: boolean ,</strong></p>
+<p style="padding-left: 30px;"><strong>createdAt : date</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong><strong>&nbsp;</strong></strong></p>
+<p><span style="font-weight: 400;">get</span> <span style="font-weight: 400;">/channels/{cId}/message</span></p>
+<p style="padding-left: 30px;"><strong><em>// get all messages in channel by cId</em></strong></p>
+<p style="padding-left: 30px;"><strong>params {</strong></p>
+<p style="padding-left: 30px;"><strong>limit : number , &nbsp;&nbsp;// for pagination</strong></p>
+<p style="padding-left: 30px;"><strong>skip &nbsp;: number &nbsp;&nbsp;&nbsp;&nbsp;// for pagination (negative number can</strong></p>
+<p style="padding-left: 30px;"><strong> &nbsp;&nbsp;// start from last and work backwards?)</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>return {</strong></p>
+<p style="padding-left: 30px;"><strong>results : [</strong></p>
+<p style="padding-left: 30px;"><strong>{</strong></p>
+<p style="padding-left: 30px;"><strong>markDown &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>createdAt : date ,</strong></p>
+<p style="padding-left: 30px;"><strong>mId &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ObjectId ,</strong></p>
+<p style="padding-left: 30px;"><strong>uId &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ObjectId // or some pointer obj for user...</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p style="padding-left: 30px;"><strong>] ,</strong></p>
+<p style="padding-left: 30px;"><strong>count : number</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p><strong><strong>&nbsp;</strong></strong></p>
+<p><span style="font-weight: 400;">get</span> <span style="font-weight: 400;">/channels/{cId}/message/{mId}</span></p>
+<p style="padding-left: 30px;"><strong><em>// get message by cId and/or mId (depending on the schema I guess)</em></strong></p>
+<p style="padding-left: 30px;"><strong>return {</strong></p>
+<p style="padding-left: 30px;"><strong>markDown &nbsp;: string ,</strong></p>
+<p style="padding-left: 30px;"><strong>createdAt : date ,</strong></p>
+<p style="padding-left: 30px;"><strong>mId &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ObjectId ,</strong></p>
+<p style="padding-left: 30px;"><strong>uId &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ObjectId // or some pointer obj for user...</strong></p>
+<p style="padding-left: 30px;"><strong>}</strong></p>
+<p><span style="font-weight: 400;">db.find({messages:{cId:channel_i_am_in}})</span></p>
+<p><strong><strong>&nbsp;</strong></strong></p>
+<p><strong>Notifications</strong></p>
+<p><strong> <span style="font-weight: 400;">channels/{cId}/notifications/</span></strong></p>
 {% endblock %}

@@ -4,7 +4,8 @@
 var gulp = require('gulp'),
     util = require('gulp-util'),
     concat = require('gulp-concat'),
-    minifycss = require('gulp-minify-css'),
+    cleanCSS = require('gulp-clean-css'),
+    sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify'),
     imagemin = require('gulp-imagemin');
 
@@ -22,14 +23,18 @@ gulp.task('default', function(){
 
     // concat and minify your css
     gulp.src(assets.development.css)
+        .pipe(sourcemaps.init())
         .pipe(concat('styles.css'))
-        .pipe(minifycss())
+        .pipe(cleanCSS())
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest('./css/'));
 
     // concat and minify your js
     gulp.src(assets.development.js)
+        .pipe(sourcemaps.init())
         .pipe(concat('scripts.js'))
         .pipe(uglify())
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest('./js/'));
 
     // optimize your images
