@@ -1,4 +1,4 @@
-// messages routes for default index/root path
+// messages routes for default index/root path, about page, 404 error pages, and others..
 exports.register = function(server, options, next){
 
 var messagesData = rootRequire('server/data/messages/index.json');
@@ -10,14 +10,8 @@ var messagesData = rootRequire('server/data/messages/index.json');
             config: {
                 handler: function(req, reply) {
 				  if (req.params.id) {
-                    var messageIndex = -1;
-                    for (var i=0; i < messagesData.length; i++) {
-                        if (messagesData[i].messageID === req.params.id) {
-                            messageIndex = i;
-                        }
-                    }
-				    if (messageIndex<0) return reply('No message found.').code(404);
-				    return reply(messagesData[messageIndex]);
+				    if (messagesData.length <= req.params.id) return reply('No message found.').code(404);
+				    return reply(messagesData[req.params.id]);
 				  }
 				  reply(messagesData);
 				}
