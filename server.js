@@ -1,13 +1,17 @@
+'use strict';
 global.rootRequire = function(name) {
     return require(__dirname + '/' + name);
 }
 /**
 * Dependencies.
 */
-var Hapi = require('hapi');
+const Path = require('path');
+const Hapi = require('hapi');
+const Inert = require('inert');
+const Hoek = require('hoek');
 
 // Create a new server
-var server = new Hapi.Server();
+const server = new Hapi.Server();
 
 // Setup the server with a host and port
 server.connection({
@@ -16,11 +20,17 @@ server.connection({
 });
 
 // Setup the views engine and folder
-server.views({
-    engines: {
-        html: require('swig')
-    },
-    path: './server/views'
+server.register(require('vision'), (err) => {
+
+    Hoek.assert(!err, err);
+
+    server.views({
+        engines: {
+            html: require('swig')
+        },
+        relativeTo: __dirname,
+        path: './server/views'
+    });
 });
 
 // Export the server to be required elsewhere.
@@ -33,12 +43,15 @@ module.exports = server;
  */
 server.register([
     {
+        register: Inert
+    },
+    {
         register: require("good"),
         options: {
             opsInterval: 5000,
             reporters: [{
                 reporter: require('good-console'),
-                args:[{ ops: '*', request: '*', log: '*', response: '*', 'error': '*' }]
+                events:[{ ops: '*', request: '*', log: '*', response: '*', 'error': '*' }]
             }]
         }
     },
@@ -63,8 +76,10 @@ server.register([
     }
 ], function () {
     //Start the server
-    server.start(function() {
-        //Log to the console the host and port info
-        console.log('Server started at: ' + server.info.uri);
+    server.start((err) => {
+        if (err) {
+            throw err;
+        }
+        console.log('Server running at:', server.info.uri);
     });
 });
