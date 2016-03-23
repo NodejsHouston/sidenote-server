@@ -16,9 +16,11 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "async": "^1.5.2",
     "good": "^6.0.0",
     "good-console": "^5.3.1",
-    "hapi": "^13.2.1"
+    "hapi": "^13.2.1",
+    "rethinkdb": "^2.2.2"
   },
   "devDependencies": {
     "eslint-config-google": "^0.4.0",
