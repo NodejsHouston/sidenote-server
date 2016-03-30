@@ -3,11 +3,6 @@ var async = require('async');
 var r = require('rethinkdb');
 var config = require(path.join(__dirname, 'config.js'));
 
-global.rootRequire = function(name) {
-  var projectPath = path.join(__dirname, name);
-  return require(projectPath);
-};
-
 var Hapi = require('hapi');
 var server = new Hapi.Server();
 
@@ -95,7 +90,7 @@ async.waterfall([
     // Wait for the index to be ready.
     r.table('messages')
       .indexWait('createdAt')
-      .run(connection, function(err, result) {
+      .run(connection, function(err) {
         callback(err, connection);
       });
   }
