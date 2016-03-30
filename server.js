@@ -9,8 +9,6 @@ global.rootRequire = function(name) {
 };
 
 var Hapi = require('hapi');
-
-// Create a new server
 var server = new Hapi.Server();
 
 function startHapi(connection) {
@@ -109,7 +107,6 @@ async.waterfall([
     return;
   }
 
-  // Setup the server with a host and port
   startHapi(connection);
 });
 
