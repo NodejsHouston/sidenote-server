@@ -14,6 +14,9 @@ function startHapi(connection) {
 
   server._rdbConn = connection;
 
+  // Export the server to be required elsewhere.
+  module.exports = server;
+
   server.register([
     {
       register: require("good"),
@@ -33,6 +36,9 @@ function startHapi(connection) {
     },
     {
       register: require('./server/base/messages/index.js')
+    },
+    {
+      register: require('./server/socket/index.js')
     }
   ], function() {
     server.start(function() {
