@@ -1,5 +1,6 @@
 var path = require('path');
 
+
 global.rootRequire = function(name) {
   var projectPath = path.join(__dirname, name);
   return require(projectPath);
@@ -15,6 +16,7 @@ server.connection({
   port: parseInt(process.env.PORT, 10) || 3000,
   host: 'localhost'
 });
+
 
 // Export the server to be required elsewhere.
 module.exports = server;
@@ -43,6 +45,9 @@ server.register([
   },
   {
     register: require('./server/base/messages/index.js')
+  },
+  {
+    register: require('./server/socket/index.js')
   }
 ], function() {
   server.start(function() {
