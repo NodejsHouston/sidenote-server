@@ -1,7 +1,7 @@
-// messages routes for default index/root path, about page, 404 error pages, and others..
-exports.register = function(server, options, next) {
-  var messagesData = rootRequire('server/data/messages/index.json');
+var r = require('rethinkdb');
+var Boom = require('boom');
 
+exports.register = function(server, options, next) {
   server.route([
     {
       method: 'GET',
@@ -9,23 +9,50 @@ exports.register = function(server, options, next) {
       config: {
         handler: function(req, reply) {
           if (req.params.id) {
-            if (messagesData.length <= req.params.id) {
-              return reply('No message found.').code(404);
-            }
-            return reply(messagesData[req.params.id]);
+            r.table('messages')
+              .get(req.params.id)
+              .run(req.server._rdbConn, function(err, result) {
+                if (err) {
+                  return reply(Boom.badImplementation(err));
+                }
+                if (result) {
+                  return reply(result);
+                }
+                return reply(Boom.notFound());
+              });
+          } else {
+            r.table('messages')
+              .run(req.server._rdbConn, function(err, result) {
+                if (err) {
+                  return reply(Boom.badImplementation(err));
+                }
+                result.toArray(function(error, arrayResult) {
+                  if (error) {
+                    return reply(Boom.badImplementation(error));
+                  }
+                  return reply(arrayResult);
+                });
+              });
           }
-          reply(messagesData);
         }
       }
     },
     {
       method: 'POST',
-      path: '/messages/',
+      path: '/messages',
       config: {
         handler: function(req, reply) {
-          var newQuote = {author: req.payload.author, text: req.payload.text};
-          messagesData.push(newQuote);
-          reply(newQuote);
+          var message = Object.assign(req.payload,
+                                      {createdAt: new Date()});
+
+          r.table('messages')
+            .insert(message, {returnChanges: true})
+            .run(req.server._rdbConn, function(err, result) {
+              if (err) {
+                return reply(Boom.badImplementation(err));
+              }
+              return reply(result.changes[0].new_val);
+            });
         }
       }
     },
@@ -34,11 +61,19 @@ exports.register = function(server, options, next) {
       path: '/messages/{id}',
       config: {
         handler: function(req, reply) {
-          if (messagesData.length <= req.params.id) {
-            return reply('No quote found.').code(404);
+          if (req.params.id) {
+            r.table('messages')
+              .get(req.params.id)
+              .delete({returnChanges: true})
+              .run(req.server._rdbConn, function(err, result) {
+                if (err) {
+                  return reply(Boom.badImplementation(err));
+                }
+                return reply(result);
+              });
+          } else {
+            return reply(Boom.badImplementation());
           }
-          messagesData.splice(req.params.id, 1);
-          reply(true);
         }
       }
     }
