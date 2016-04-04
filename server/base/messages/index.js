@@ -15,21 +15,24 @@ exports.register = function(server, options, next) {
                 if (err) {
                   return reply(Boom.badImplementation(err));
                 }
-                return reply(result);
+                if (result) {
+                  return reply(result);
+                }
+                return reply(Boom.notFound());
               });
           } else {
             r.table('messages')
-            .run(req.server._rdbConn, function(err, result) {
-              if (err) {
-                return reply(Boom.badImplementation(err));
-              }
-              result.toArray(function(error, arrayResult) {
-                if (error) {
-                  return reply(Boom.badImplementation(error));
+              .run(req.server._rdbConn, function(err, result) {
+                if (err) {
+                  return reply(Boom.badImplementation(err));
                 }
-                return reply(arrayResult);
+                result.toArray(function(error, arrayResult) {
+                  if (error) {
+                    return reply(Boom.badImplementation(error));
+                  }
+                  return reply(arrayResult);
+                });
               });
-            });
           }
         }
       }
