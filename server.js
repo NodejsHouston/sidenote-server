@@ -36,6 +36,9 @@ server.register([
     register: require('./server/base/messages/index.js')
   },
   {
+    register: require('./server/base/users/index.js')
+  },
+  {
     register: require('./server/socket/index.js')
   }
 ], function() {
