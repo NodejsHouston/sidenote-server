@@ -16,12 +16,13 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "async": "^1.5.2",
+    "async": "2.0.0-rc.3",
     "boom": "3.1.2",
     "good": "^6.0.0",
     "good-console": "^5.3.1",
     "hapi": "^13.2.1",
-    "rethinkdb": "^2.2.2",
+    "lodash": "4.11.1",
+    "rethinkdbdash": "2.3.3",
     "socket.io": "^1.4.5"
   },
   "devDependencies": {

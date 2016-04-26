@@ -1,7 +1,12 @@
-var r = require('rethinkdb');
+var path = require('path');
+var db = require(path.join(path.dirname(require.main.filename), 'models'));
+
 var Boom = require('boom');
+var _ = require('lodash');
 
 exports.register = function(server, options, next) {
+  var Message = db.model('Message');
+
   server.route([
     {
       method: 'GET',
@@ -9,30 +14,24 @@ exports.register = function(server, options, next) {
       config: {
         handler: function(req, reply) {
           if (req.params.id) {
-            r.table('messages')
-              .get(req.params.id)
-              .run(req.server._rdbConn, function(err, result) {
-                if (err) {
-                  return reply(Boom.badImplementation(err));
-                }
-                if (result) {
-                  return reply(result);
-                }
+            Message.find(req.params.id, function(err, message) {
+              if (err) {
+                return reply(Boom.badImplementation(err));
+              }
+              if (_.isEmpty(message)) {
                 return reply(Boom.notFound());
-              });
+              }
+              return reply(message);
+            });
           } else {
-            r.table('messages')
-              .run(req.server._rdbConn, function(err, result) {
-                if (err) {
-                  return reply(Boom.badImplementation(err));
-                }
-                result.toArray(function(error, arrayResult) {
-                  if (error) {
-                    return reply(Boom.badImplementation(error));
-                  }
-                  return reply(arrayResult);
-                });
-              });
+            // Alternative: use native r methods
+            Message.r.run()
+              .then(function(messages) {
+                return reply(messages);
+              })
+              .error(function(err) {
+                return reply(Boom.badImplementation(err));
+              })
           }
         }
       }
@@ -42,17 +41,12 @@ exports.register = function(server, options, next) {
       path: '/messages',
       config: {
         handler: function(req, reply) {
-          var message = Object.assign(req.payload,
-                                      {createdAt: new Date()});
-
-          r.table('messages')
-            .insert(message, {returnChanges: true})
-            .run(req.server._rdbConn, function(err, result) {
-              if (err) {
-                return reply(Boom.badImplementation(err));
-              }
-              return reply(result.changes[0].new_val);
-            });
+          Message.create(req.payload, function(err, newMessage) {
+            if (err) {
+              return reply(Boom.badImplementation(err));
+            }
+            return reply(newMessage);
+          });
         }
       }
     },
@@ -62,15 +56,12 @@ exports.register = function(server, options, next) {
       config: {
         handler: function(req, reply) {
           if (req.params.id) {
-            r.table('messages')
-              .get(req.params.id)
-              .delete({returnChanges: true})
-              .run(req.server._rdbConn, function(err, result) {
-                if (err) {
-                  return reply(Boom.badImplementation(err));
-                }
-                return reply(result);
-              });
+            Message.remove(req.params.id, function(err, result) {
+              if (err) {
+                return reply(Boom.badImplementation(err));
+              }
+              return reply(result);
+            });
           } else {
             return reply(Boom.badImplementation());
           }
