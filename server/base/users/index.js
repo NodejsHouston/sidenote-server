@@ -5,29 +5,29 @@ var Boom = require('boom');
 var _ = require('lodash');
 
 exports.register = function(server, options, next) {
-  var Message = db.model('Message');
+  var User = db.model('User');
 
   server.route([
     {
       method: 'GET',
-      path: '/messages/{id?}',
+      path: '/users/{id?}',
       config: {
         handler: function(req, reply) {
           if (req.params.id) {
-            Message.find(req.params.id, function(err, message) {
+            User.find(req.params.id, function(err, user) {
               if (err) {
                 return reply(Boom.badImplementation(err));
               }
-              if (_.isEmpty(message)) {
+              if (_.isEmpty(user)) {
                 return reply(Boom.notFound());
               }
-              return reply(message);
+              return reply(user);
             });
           } else {
             // Alternative: use native r methods
-            Message.r.run()
-              .then(function(messages) {
-                return reply(messages);
+            User.r.run()
+              .then(function(users) {
+                return reply(users);
               })
               .error(function(err) {
                 return reply(Boom.badImplementation(err));
@@ -38,25 +38,25 @@ exports.register = function(server, options, next) {
     },
     {
       method: 'POST',
-      path: '/messages',
+      path: '/users',
       config: {
         handler: function(req, reply) {
-          Message.create(req.payload, function(err, newMessage) {
+          User.create(req.payload, function(err, newUser) {
             if (err) {
               return reply(Boom.badImplementation(err));
             }
-            return reply(newMessage);
+            return reply(newUser);
           });
         }
       }
     },
     {
       method: 'DELETE',
-      path: '/messages/{id}',
+      path: '/users/{id}',
       config: {
         handler: function(req, reply) {
           if (req.params.id) {
-            Message.remove(req.params.id, function(err, result) {
+            User.remove(req.params.id, function(err, result) {
               if (err) {
                 return reply(Boom.badImplementation(err));
               }
@@ -74,5 +74,5 @@ exports.register = function(server, options, next) {
 };
 
 exports.register.attributes = {
-  name: 'messages'
+  name: 'users'
 };
